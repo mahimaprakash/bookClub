@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "84911192910-3orfrmrpcvae2vlg0h6gng6g0d6r0elh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bookclub",
+            "certificate_hash": "66e3621cef8aa3b7e51d7c0ce99900f13f551081"
+          }
+        },
+        {
           "client_id": "84911192910-1vnackltcm8okh5k2bmbj4u8k9c0abl9.apps.googleusercontent.com",
           "client_type": 3
         }

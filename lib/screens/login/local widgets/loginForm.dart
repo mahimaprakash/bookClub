@@ -5,6 +5,11 @@ import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+enum LoginType {
+  email,
+  google,
+}
+
 class MyLoginForm extends StatefulWidget {
   @override
   _MyLoginFormState createState() => _MyLoginFormState();
@@ -14,11 +19,30 @@ class _MyLoginFormState extends State<MyLoginForm> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  void _loginUser(String email, String password, BuildContext context) async {
+  void _loginUser({
+    @required LoginType type,
+    String email,
+    String password,
+    BuildContext context,
+  }) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
 
     try {
-      if (await _currentUser.loginUser(email, password)) {
+      String _returnString;
+
+      switch (type) {
+        case LoginType.email:
+          _returnString =
+              await _currentUser.loginUserWithEmail(email, password);
+
+          break;
+        case LoginType.google:
+          _returnString = await _currentUser.loginUserWithGoogle();
+          break;
+        default:
+      }
+
+      if (_returnString == "success") {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => HomeScreen(),
@@ -26,13 +50,47 @@ class _MyLoginFormState extends State<MyLoginForm> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Incorrect Login Credentials!"),
+          content: Text(_returnString),
           duration: Duration(seconds: 2),
         ));
       }
     } catch (e) {
       print(e);
     }
+  }
+
+  Widget _googleButton() {
+    return OutlinedButton(
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all(Colors.grey),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(40))),
+        side: MaterialStateProperty.all(BorderSide(color: Colors.grey)),
+      ),
+      onPressed: () {
+        _loginUser(type: LoginType.google, context: context);
+      },
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage("assets/google.png"),
+              height: 25.0,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "Sign in with Google",
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -71,7 +129,10 @@ class _MyLoginFormState extends State<MyLoginForm> {
           ElevatedButton(
               onPressed: () {
                 _loginUser(
-                    _emailController.text, _passwordController.text, context);
+                    type: LoginType.email,
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                    context: context);
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 10),
@@ -92,7 +153,8 @@ class _MyLoginFormState extends State<MyLoginForm> {
             child: Text(
               "Don't have an account? SignUp here",
             ),
-          )
+          ),
+          _googleButton(),
         ],
       ),
     );
