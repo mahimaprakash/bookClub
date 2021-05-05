@@ -1,4 +1,4 @@
-import 'package:bookclub/screens/login/login.dart';
+import 'package:bookclub/screens/root/root.dart';
 import 'package:bookclub/states/currentUser.dart';
 import 'package:bookclub/utils/ourTheme.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: OurTheme().buildTheme(),
-        home: MyLogin(),
+        home: MyRoot(),
       ),
     );
   }

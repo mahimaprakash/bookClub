@@ -43,11 +43,12 @@ class _MyLoginFormState extends State<MyLoginForm> {
       }
 
       if (_returnString == "success") {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(),
-          ),
-        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+            (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(_returnString),
