@@ -14,11 +14,13 @@ class _MySignupFormState extends State<MySignupForm> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
-  void _signupUser(String email, String password, BuildContext context) async {
+  void _signupUser(String email, String password, String fullName,
+      BuildContext context) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
 
     try {
-      String _returnString = await _currentUser.signupUser(email, password);
+      String _returnString =
+          await _currentUser.signupUser(email, password, fullName);
       if (_returnString == "success") {
         Navigator.pop(context);
       } else {
@@ -87,8 +89,8 @@ class _MySignupFormState extends State<MySignupForm> {
               onPressed: () {
                 if (_passwordController.text ==
                     _confirmPasswordController.text) {
-                  _signupUser(
-                      _emailController.text, _passwordController.text, context);
+                  _signupUser(_emailController.text, _passwordController.text,
+                      _fullNameController.text, context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("Passwords do not match"),
