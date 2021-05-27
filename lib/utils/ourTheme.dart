@@ -26,6 +26,16 @@ class OurTheme {
             ),
           ),
         ),
+        buttonTheme: ButtonThemeData(
+          buttonColor: _green,
+          hoverColor: _blue,
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          minWidth: 200,
+          height: 40.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Color(0xFF206a5d)),
