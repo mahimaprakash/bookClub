@@ -1,10 +1,20 @@
+import 'package:bookclub/screens/createGroup/createGroup.dart';
+import 'package:bookclub/screens/joinGroup/joinGroup.dart';
 import 'package:flutter/material.dart';
 
 class MyNoGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _goToJoin() {}
-    void _goToCreate() {}
+    void _goToJoin(BuildContext context) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MyJoinGroup()));
+    }
+
+    void _goToCreate(BuildContext context) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MyCreateGroup()));
+    }
+
     return Scaffold(
       body: Column(
         children: [
@@ -41,9 +51,10 @@ class MyNoGroup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                    onPressed: () => _goToCreate(), child: Text("Create")),
+                    onPressed: () => _goToCreate(context),
+                    child: Text("Create")),
                 ElevatedButton(
-                    onPressed: () => _goToJoin(), child: Text("Join")),
+                    onPressed: () => _goToJoin(context), child: Text("Join")),
               ],
             ),
           )

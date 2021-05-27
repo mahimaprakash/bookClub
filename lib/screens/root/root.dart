@@ -1,10 +1,17 @@
 import 'package:bookclub/screens/home/home.dart';
 import 'package:bookclub/screens/login/login.dart';
+import 'package:bookclub/screens/noGroup/noGroup.dart';
+import 'package:bookclub/screens/splashScreen/splashScreen.dart';
 import 'package:bookclub/states/currentUser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum AuthStatus { notLoggedIn, loggedIn }
+enum AuthStatus {
+  unknown,
+  notLoggedIn,
+  notInGroup,
+  inGroup,
+}
 
 class MyRoot extends StatefulWidget {
   @override
@@ -12,7 +19,7 @@ class MyRoot extends StatefulWidget {
 }
 
 class _MyRootState extends State<MyRoot> {
-  AuthStatus _authStatus = AuthStatus.notLoggedIn;
+  AuthStatus _authStatus = AuthStatus.unknown;
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -20,8 +27,18 @@ class _MyRootState extends State<MyRoot> {
     CurrentUser _currenUser = Provider.of<CurrentUser>(context, listen: false);
     String _returnString = await _currenUser.onStartUp();
     if (_returnString == "success") {
+      if (_currenUser.getCurrentUser.groupId != null) {
+        setState(() {
+          _authStatus = AuthStatus.inGroup;
+        });
+      } else {
+        setState(() {
+          _authStatus = AuthStatus.notInGroup;
+        });
+      }
+    } else {
       setState(() {
-        _authStatus = AuthStatus.loggedIn;
+        _authStatus = AuthStatus.notLoggedIn;
       });
     }
   }
@@ -31,10 +48,16 @@ class _MyRootState extends State<MyRoot> {
     Widget retVal;
 
     switch (_authStatus) {
+      case AuthStatus.unknown:
+        retVal = MySplashScreen();
+        break;
       case AuthStatus.notLoggedIn:
         retVal = MyLogin();
         break;
-      case AuthStatus.loggedIn:
+      case AuthStatus.notInGroup:
+        retVal = MyNoGroup();
+        break;
+      case AuthStatus.inGroup:
         retVal = HomeScreen();
         break;
       default:
