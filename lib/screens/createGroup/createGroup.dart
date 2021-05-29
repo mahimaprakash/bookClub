@@ -1,9 +1,6 @@
-import 'package:bookclub/screens/root/root.dart';
-import 'package:bookclub/services/database.dart';
-import 'package:bookclub/states/currentUser.dart';
+import 'package:bookclub/screens/addBook/addBook.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class MyCreateGroup extends StatefulWidget {
   @override
@@ -11,18 +8,14 @@ class MyCreateGroup extends StatefulWidget {
 }
 
 class _MyCreateGroupState extends State<MyCreateGroup> {
-  void _createGroup(BuildContext context, String groupName) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    String _returnString = await MyDatabase()
-        .createGroup(groupName, _currentUser.getCurrentUser.uid);
-    if (_returnString == 'success') {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyRoot(),
-          ),
-          (route) => false);
-    }
+  void _goToAddBook(BuildContext context, String groupName) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            MyAddBook(onGroupCreation: true, groupName: groupName),
+      ),
+    );
   }
 
   TextEditingController _groupNameController = TextEditingController();
@@ -56,11 +49,11 @@ class _MyCreateGroupState extends State<MyCreateGroup> {
                   ),
                   ElevatedButton(
                       onPressed: () =>
-                          _createGroup(context, _groupNameController.text),
+                          _goToAddBook(context, _groupNameController.text),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Text(
-                          "Create",
+                          "Add Book",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20.0),
                         ),
@@ -68,7 +61,8 @@ class _MyCreateGroupState extends State<MyCreateGroup> {
                 ],
               ),
             ),
-          )
+          ),
+          Spacer(),
         ],
       ),
     );

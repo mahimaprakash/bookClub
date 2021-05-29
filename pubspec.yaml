@@ -28,6 +28,8 @@ dependencies:
   firebase_auth:
   provider:
   google_sign_in:
+  flutter_datetime_picker:
+  intl:
 
 
 

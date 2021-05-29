@@ -1,3 +1,4 @@
+import 'package:bookclub/screens/addBook/addBook.dart';
 import 'package:bookclub/screens/noGroup/noGroup.dart';
 import 'package:bookclub/screens/root/root.dart';
 import 'package:bookclub/states/currentGroup.dart';
@@ -36,9 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _goToNoGroup(BuildContext context) {
+  void _goToAddBook(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MyNoGroup()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyAddBook(
+            onGroupCreation: false,
+          ),
+        ));
   }
 
   @override
@@ -57,8 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Text(
                       value.getCurrentBook.name ?? "loading..",
-                      style:
-                          TextStyle(fontSize: 25.0, color: Color(0xFF206a5d)),
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF206a5d)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -124,17 +132,21 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(50.0),
             child: ElevatedButton(
-                onPressed: () => _goToNoGroup(context),
+                onPressed: () => _goToAddBook(context),
                 child: Text(
-                  "Book CLub History",
-                  style: TextStyle(),
+                  "Book Club History",
+                  style: TextStyle(fontSize: 20.0),
                 )),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
             child: ElevatedButton(
               onPressed: () => _signOut(context),
-              child: Text("Sign Out"),
+              child: Text(
+                "Sign Out",
+                style: TextStyle(fontSize: 20.0),
+              ),
+
               // style: ButtonStyle(
               //   backgroundColor: MaterialStateProperty.all(Color(0xFFF8A488)),
               // ),
