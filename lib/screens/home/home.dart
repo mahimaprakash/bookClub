@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:bookclub/screens/addBook/addBook.dart';
-import 'package:bookclub/screens/noGroup/noGroup.dart';
 import 'package:bookclub/screens/root/root.dart';
 import 'package:bookclub/states/currentGroup.dart';
 import 'package:bookclub/states/currentUser.dart';
+import 'package:bookclub/utils/timeLeft.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<String> _timeUntil = [];
+  //[0] - time until current book is due
+  //[1] - time unitl next book is revealed
+
+  Timer _timer;
+
+  void _startTimer(CurrentGroup _currentGroup) {
+    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+      setState(() {
+        _timeUntil = MyTimeLeft()
+            .timeLeft(_currentGroup.getCurrentGroup.currentBookDue.toDate());
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
     CurrentGroup _currentGroup =
         Provider.of<CurrentGroup>(context, listen: false);
     _currentGroup.updateStateFromDatabase(_currentUser.getCurrentUser.groupId);
+    _startTimer(_currentGroup);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   void _signOut(BuildContext context) async {
@@ -79,11 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              (value.getCurrentGroup.currentBookDue != null)
-                                  ? value.getCurrentGroup.currentBookDue
-                                      .toDate()
-                                      .toString()
-                                  : "loading..",
+                              _timeUntil[0] ?? "loading..",
                               style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
@@ -109,16 +129,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: MyContainer(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Next Book Revealed In:",
+                      "Next Book\nRevealed In:",
                       style:
                           TextStyle(fontSize: 20.0, color: Color(0xFF206a5d)),
                     ),
                     Text(
-                      "23 Hours",
+                      _timeUntil[1] ?? "loading..",
                       style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
