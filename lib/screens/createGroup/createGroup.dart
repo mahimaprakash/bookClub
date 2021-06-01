@@ -48,16 +48,17 @@ class _MyCreateGroupState extends State<MyCreateGroup> {
                     height: 20.0,
                   ),
                   ElevatedButton(
-                      onPressed: () =>
-                          _goToAddBook(context, _groupNameController.text),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(
-                          "Add Book",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.0),
-                        ),
-                      ))
+                    onPressed: () =>
+                        _goToAddBook(context, _groupNameController.text),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        "Add Book",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

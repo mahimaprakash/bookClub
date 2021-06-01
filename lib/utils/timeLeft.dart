@@ -1,6 +1,6 @@
 class MyTimeLeft {
   List<String> timeLeft(DateTime due) {
-    List<String> retVal = [];
+    List<String> retVal = List<String>.filled(2, '0');
 
     Duration _timeUntilDue = due.difference(DateTime.now());
     int _daysUntil = _timeUntilDue.inDays;

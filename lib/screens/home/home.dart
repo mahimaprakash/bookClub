@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bookclub/screens/addBook/addBook.dart';
+import 'package:bookclub/screens/review/review.dart';
 import 'package:bookclub/screens/root/root.dart';
 import 'package:bookclub/states/currentGroup.dart';
 import 'package:bookclub/states/currentUser.dart';
@@ -15,17 +16,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> _timeUntil = [];
+  List<String> _timeUntil = List<String>.filled(2, "0");
+
   //[0] - time until current book is due
   //[1] - time unitl next book is revealed
 
   Timer _timer;
 
-  void _startTimer(CurrentGroup _currentGroup) {
+  void _startTimer(CurrentGroup currentGroup) {
     _timer = Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {
         _timeUntil = MyTimeLeft()
-            .timeLeft(_currentGroup.getCurrentGroup.currentBookDue.toDate());
+            .timeLeft(currentGroup.getCurrentGroup.currentBookDue.toDate());
       });
     });
   }
@@ -37,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
     CurrentGroup _currentGroup =
         Provider.of<CurrentGroup>(context, listen: false);
-    _currentGroup.updateStateFromDatabase(_currentUser.getCurrentUser.groupId);
+    _currentGroup.updateStateFromDatabase(
+        _currentUser.getCurrentUser.groupId, _currentUser.getCurrentUser.uid);
     _startTimer(_currentGroup);
   }
 
@@ -63,12 +66,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _goToAddBook(BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MyAddBook(
-            onGroupCreation: false,
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyAddBook(
+          onGroupCreation: false,
+        ),
+      ),
+    );
+  }
+
+  void _goToReview() {
+    CurrentGroup _currentGroup =
+        Provider.of<CurrentGroup>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyReview(
+          currentGroup: _currentGroup,
+        ),
+      ),
+    );
   }
 
   @override
@@ -114,7 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            value.getDoneWithCurrentBook ? null : _goToReview(),
                         child: Text(
                           "Finished Book",
                           style: TextStyle(color: Colors.white),

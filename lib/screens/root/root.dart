@@ -21,9 +21,11 @@ class MyRoot extends StatefulWidget {
 
 class _MyRootState extends State<MyRoot> {
   AuthStatus _authStatus = AuthStatus.unknown;
+
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
+
     //get the state, check current user, set AuthStatus
     CurrentUser _currenUser = Provider.of<CurrentUser>(context, listen: false);
     String _returnString = await _currenUser.onStartUp();

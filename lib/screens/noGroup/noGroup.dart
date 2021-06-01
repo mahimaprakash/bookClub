@@ -1,5 +1,6 @@
 import 'package:bookclub/screens/createGroup/createGroup.dart';
 import 'package:bookclub/screens/joinGroup/joinGroup.dart';
+import 'package:bookclub/screens/login/login.dart';
 import 'package:flutter/material.dart';
 
 class MyNoGroup extends StatelessWidget {
@@ -13,6 +14,11 @@ class MyNoGroup extends StatelessWidget {
     void _goToCreate(BuildContext context) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => MyCreateGroup()));
+    }
+
+    void _goToLogin(BuildContext context) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MyLogin()));
     }
 
     return Scaffold(
@@ -55,6 +61,9 @@ class MyNoGroup extends StatelessWidget {
                     child: Text("Create")),
                 ElevatedButton(
                     onPressed: () => _goToJoin(context), child: Text("Join")),
+                ElevatedButton(
+                    onPressed: () => _goToLogin(context),
+                    child: Text("go to login")),
               ],
             ),
           )

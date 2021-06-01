@@ -46,7 +46,7 @@ class _MyAddBookState extends State<MyAddBook> {
           await MyDatabase().addBook(_currentUser.getCurrentUser.groupId, book);
     }
 
-    if (_returnString == 'success') {
+    if (_returnString == "success") {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
