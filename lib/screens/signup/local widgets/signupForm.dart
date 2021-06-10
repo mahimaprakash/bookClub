@@ -1,7 +1,6 @@
-import 'package:bookclub/states/currentUser.dart';
+import 'package:bookclub/services/auth.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class MySignupForm extends StatefulWidget {
   @override
@@ -16,18 +15,17 @@ class _MySignupFormState extends State<MySignupForm> {
 
   void _signupUser(String email, String password, String fullName,
       BuildContext context) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-
     try {
-      String _returnString =
-          await _currentUser.signupUser(email, password, fullName);
+      String _returnString = await Auth().signupUser(email, password, fullName);
       if (_returnString == "success") {
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(_returnString),
-          duration: Duration(seconds: 2),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_returnString),
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     } catch (e) {
       print(e);
@@ -86,28 +84,28 @@ class _MySignupFormState extends State<MySignupForm> {
             height: 25.0,
           ),
           ElevatedButton(
-              onPressed: () {
-                if (_passwordController.text ==
-                    _confirmPasswordController.text) {
-                  _signupUser(_emailController.text, _passwordController.text,
-                      _fullNameController.text, context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Passwords do not match"),
-                    duration: Duration(seconds: 2),
-                  ));
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 10),
-                child: Text(
-                  "SIGNUP",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0),
-                ),
-              )),
+            onPressed: () {
+              if (_passwordController.text == _confirmPasswordController.text) {
+                _signupUser(_emailController.text, _passwordController.text,
+                    _fullNameController.text, context);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Passwords do not match"),
+                  duration: Duration(seconds: 2),
+                ));
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 10),
+              child: Text(
+                "SIGNUP",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0),
+              ),
+            ),
+          ),
         ],
       ),
     );

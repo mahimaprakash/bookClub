@@ -21,7 +21,7 @@ class MyLogin extends StatelessWidget {
               // SizedBox(
               //   height: 20.0,
               // ),
-              MyLoginForm(),
+              LoginForm(),
             ],
           ))
         ],

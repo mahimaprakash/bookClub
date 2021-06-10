@@ -1,24 +1,26 @@
-import 'package:bookclub/models/book.dart';
+import 'package:bookclub/models/authmodel.dart';
+import 'package:bookclub/models/bookModel.dart';
+import 'package:bookclub/models/userModel.dart';
 import 'package:bookclub/screens/root/root.dart';
-import 'package:bookclub/services/database.dart';
-import 'package:bookclub/states/currentUser.dart';
+import 'package:bookclub/services/dbFuture.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
+import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class MyAddBook extends StatefulWidget {
+class AddBook extends StatefulWidget {
   final bool onGroupCreation;
   final String groupName;
-
-  MyAddBook({this.onGroupCreation, this.groupName});
+  final UserModel currentUser;
+  AddBook({this.onGroupCreation, this.groupName, this.currentUser});
 
   @override
-  _MyAddBookState createState() => _MyAddBookState();
+  _AddBookState createState() => _AddBookState();
 }
 
-class _MyAddBookState extends State<MyAddBook> {
+class _AddBookState extends State<AddBook> {
   TextEditingController _bookNameController = TextEditingController();
   TextEditingController _authorController = TextEditingController();
   TextEditingController _lengthController = TextEditingController();
@@ -35,15 +37,15 @@ class _MyAddBookState extends State<MyAddBook> {
     }
   }
 
-  void _addBook(BuildContext context, String groupName, MyBook book) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+  void _addBook(BuildContext context, String groupName, BookModel book) async {
+    AuthModel _currentUser = Provider.of<AuthModel>(context, listen: false);
     String _returnString;
     if (widget.onGroupCreation) {
-      _returnString = await MyDatabase()
-          .createGroup(groupName, _currentUser.getCurrentUser.uid, book);
+      _returnString =
+          await DbFuture().createGroup(groupName, _currentUser.uid, book);
     } else {
       _returnString =
-          await MyDatabase().addBook(_currentUser.getCurrentUser.groupId, book);
+          await DbFuture().addBook(widget.currentUser.groupId, book);
     }
 
     if (_returnString == "success") {
@@ -111,27 +113,30 @@ class _MyAddBookState extends State<MyAddBook> {
                     child: Text("Change Date"),
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        MyBook book = MyBook();
-                        book.name = _bookNameController.text;
-                        book.author = _authorController.text;
-                        book.length = int.parse(_lengthController.text);
-                        book.dateCompleted = _selectedDate;
+                    onPressed: () {
+                      BookModel book = BookModel();
+                      book.name = _bookNameController.text;
+                      book.author = _authorController.text;
+                      book.length = int.parse(_lengthController.text);
+                      book.dateCompleted = _selectedDate as Timestamp;
 
-                        _addBook(context, widget.groupName, book);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(
-                          "Create",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.0),
+                      _addBook(context, widget.groupName, book);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        "Create",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
                         ),
-                      ))
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

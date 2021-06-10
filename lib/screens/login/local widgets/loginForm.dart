@@ -1,21 +1,20 @@
 import 'package:bookclub/screens/root/root.dart';
 import 'package:bookclub/screens/signup/signup.dart';
-import 'package:bookclub/states/currentUser.dart';
+import 'package:bookclub/services/auth.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 enum LoginType {
   email,
   google,
 }
 
-class MyLoginForm extends StatefulWidget {
+class LoginForm extends StatefulWidget {
   @override
-  _MyLoginFormState createState() => _MyLoginFormState();
+  _LoginFormState createState() => _LoginFormState();
 }
 
-class _MyLoginFormState extends State<MyLoginForm> {
+class _LoginFormState extends State<LoginForm> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -25,19 +24,16 @@ class _MyLoginFormState extends State<MyLoginForm> {
     String password,
     BuildContext context,
   }) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-
     try {
       String _returnString;
 
       switch (type) {
         case LoginType.email:
-          _returnString =
-              await _currentUser.loginUserWithEmail(email, password);
+          _returnString = await Auth().loginUserWithEmail(email, password);
 
           break;
         case LoginType.google:
-          _returnString = await _currentUser.loginUserWithGoogle();
+          _returnString = await Auth().loginUserWithGoogle();
           break;
         default:
       }

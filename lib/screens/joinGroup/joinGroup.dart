@@ -1,27 +1,28 @@
+import 'package:bookclub/models/userModel.dart';
 import 'package:bookclub/screens/root/root.dart';
-import 'package:bookclub/services/database.dart';
-import 'package:bookclub/states/currentUser.dart';
+import 'package:bookclub/services/dbFuture.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MyJoinGroup extends StatefulWidget {
+class JoinGroup extends StatefulWidget {
   @override
-  _MyJoinGroupState createState() => _MyJoinGroupState();
+  _JoinGroupState createState() => _JoinGroupState();
 }
 
-class _MyJoinGroupState extends State<MyJoinGroup> {
+class _JoinGroupState extends State<JoinGroup> {
   void _joinGroup(BuildContext context, String groupId) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    UserModel _currentUser = Provider.of<UserModel>(context, listen: false);
     String _returnString =
-        await MyDatabase().joinGroup(groupId, _currentUser.getCurrentUser.uid);
+        await DbFuture().joinGroup(groupId, _currentUser.uid);
     if (_returnString == "success") {
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyRoot(),
-          ),
-          (route) => false);
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyRoot(),
+        ),
+        (route) => false,
+      );
     }
   }
 
@@ -54,16 +55,17 @@ class _MyJoinGroupState extends State<MyJoinGroup> {
                     height: 20.0,
                   ),
                   ElevatedButton(
-                      onPressed: () =>
-                          _joinGroup(context, _groupIdController.text),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 100.0),
-                        child: Text(
-                          "Join",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.0),
-                        ),
-                      ))
+                    onPressed: () =>
+                        _joinGroup(context, _groupIdController.text),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                      child: Text(
+                        "Join",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

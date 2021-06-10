@@ -2,18 +2,18 @@ import 'package:bookclub/screens/addBook/addBook.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
 
-class MyCreateGroup extends StatefulWidget {
+class CreateGroup extends StatefulWidget {
   @override
-  _MyCreateGroupState createState() => _MyCreateGroupState();
+  _CreateGroupState createState() => _CreateGroupState();
 }
 
-class _MyCreateGroupState extends State<MyCreateGroup> {
+class _CreateGroupState extends State<CreateGroup> {
   void _goToAddBook(BuildContext context, String groupName) async {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            MyAddBook(onGroupCreation: true, groupName: groupName),
+            AddBook(onGroupCreation: true, groupName: groupName),
       ),
     );
   }
@@ -31,7 +31,9 @@ class _MyCreateGroupState extends State<MyCreateGroup> {
               children: [BackButton()],
             ),
           ),
-          Spacer(),
+          Spacer(
+            flex: 1,
+          ),
           Padding(
             padding: EdgeInsets.all(20.0),
             child: MyContainer(
@@ -63,7 +65,9 @@ class _MyCreateGroupState extends State<MyCreateGroup> {
               ),
             ),
           ),
-          Spacer(),
+          Spacer(
+            flex: 1,
+          ),
         ],
       ),
     );

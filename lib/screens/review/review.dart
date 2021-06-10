@@ -1,3 +1,4 @@
+import 'package:bookclub/models/userModel.dart';
 import 'package:bookclub/states/currentGroup.dart';
 import 'package:bookclub/states/currentUser.dart';
 import 'package:bookclub/widgets/ourContainer.dart';
@@ -74,9 +75,7 @@ class _MyReviewState extends State<MyReview> {
                   ElevatedButton(
                     onPressed: () {
                       String uid =
-                          Provider.of<CurrentUser>(context, listen: false)
-                              .getCurrentUser
-                              .uid;
+                          Provider.of<UserModel>(context, listen: false).uid;
 
                       widget.currentGroup.finishedBook(
                           uid, _dropdownValue, _reviewController.text);
@@ -87,7 +86,9 @@ class _MyReviewState extends State<MyReview> {
                       child: Text(
                         "Add Review",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
                       ),
                     ),
                   )

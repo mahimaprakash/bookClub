@@ -3,17 +3,17 @@ import 'package:bookclub/screens/joinGroup/joinGroup.dart';
 import 'package:bookclub/screens/login/login.dart';
 import 'package:flutter/material.dart';
 
-class MyNoGroup extends StatelessWidget {
+class NoGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _goToJoin(BuildContext context) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyJoinGroup()));
+          context, MaterialPageRoute(builder: (context) => JoinGroup()));
     }
 
     void _goToCreate(BuildContext context) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyCreateGroup()));
+          context, MaterialPageRoute(builder: (context) => CreateGroup()));
     }
 
     void _goToLogin(BuildContext context) {
